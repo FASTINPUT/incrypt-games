@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>인크립트 게임즈 — 고양이 레이싱 (CAT RUN)</title>
 <meta name="description" content="좌우로 피하는 조작 하나. 어디까지 갈 수 있는지가 전부인 모바일 러닝 게임 '고양이 레이싱'. 인크립트 게임즈에서 2026년 출시 예정입니다.">
 <meta name="theme-color" content="#161B24">
@@ -39,13 +39,14 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%;overflow-x:hidden}
 body{
   background:var(--bg);color:var(--ink-2);
   font-family:var(--sans);font-weight:400;font-size:16px;line-height:1.85;
   letter-spacing:-.005em;-webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
 a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
+img{max-width:100%;height:auto;display:block}
 button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
 input{font-family:inherit}
 :focus-visible{outline:2px solid var(--yellow);outline-offset:3px}
@@ -75,7 +76,7 @@ nav a:hover{color:var(--yellow);border-bottom-color:var(--yellow)}
 .hero::before{content:'';position:absolute;inset:0;background:
   radial-gradient(70% 55% at 76% 42%,rgba(255,217,59,.10),transparent 70%),
   linear-gradient(180deg,#1A202B,#161B24 70%)}
-.hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:150px;
+.hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:150px;pointer-events:none;
   background:repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 40px,transparent 40px 84px);
   -webkit-mask-image:linear-gradient(transparent,#000);mask-image:linear-gradient(transparent,#000);
   transform:perspective(180px) rotateX(56deg);transform-origin:bottom;opacity:.5}
@@ -196,13 +197,107 @@ footer h5{font-size:13.5px;color:var(--ink);margin-bottom:9px;font-weight:700}
   font-weight:700;font-size:14.5px;padding:12px 24px;border-radius:9px;z-index:200;opacity:0;transition:.28s}
 .toast.on{transform:translate(-50%,0);opacity:1}
 
+/* ── 태블릿 ─────────────────────── */
 @media(max-width:900px){
   nav{display:none}
-  .hero .wrap{grid-template-columns:1fr;gap:40px}
-  .phone{max-width:300px;margin:0 auto}
-  .two,.art-grid,.contact{grid-template-columns:1fr}
+  section{padding:66px 0}
+  .hero{padding:56px 0 64px}
+  .hero .wrap{grid-template-columns:1fr;gap:36px}
+  .phone{max-width:290px;margin:0 auto}
+  .two{grid-template-columns:1fr;gap:34px}
+  .art-grid,.contact{grid-template-columns:1fr}
   .spec-row{grid-template-columns:112px 1fr}
   .step{grid-template-columns:104px 1fr}
+  .reg{padding:30px 24px}
+}
+
+/* ── 모바일 ─────────────────────── */
+@media(max-width:600px){
+  body{font-size:15.5px;line-height:1.8}
+  .wrap{width:calc(100% - 36px)}
+
+  /* 헤더: 로고와 버튼이 붙지 않게 */
+  .bar{height:58px;gap:12px}
+  .logo{font-size:14.5px;gap:8px}
+  .mark{width:21px;height:21px}
+  .bar .btn{margin-left:auto;padding:9px 15px;font-size:13.5px}
+
+  /* 히어로 */
+  .hero{padding:40px 0 52px}
+  .hero::after{height:90px}
+  .hero .wrap{gap:30px}
+  h1{font-size:34px;margin:16px 0 6px}
+  .en-title{font-size:11.5px;letter-spacing:.3em}
+  .lede{font-size:15.5px;margin-top:18px}
+  .hero-cta{margin-top:24px;gap:9px}
+  .hero-cta .btn{flex:1;text-align:center;padding:12px 14px}
+  .phone{max-width:230px;padding:6px;border-radius:20px}
+  .phone img{border-radius:15px}
+  .phone-cap{font-size:10px;margin-top:9px}
+
+  /* 섹션 */
+  section{padding:52px 0}
+  .sec-head{margin-bottom:26px}
+  h2{font-size:23px}
+  .sec-head p{font-size:14.5px;margin-top:9px}
+  .eyebrow{font-size:10.5px}
+
+  /* 스펙 표: 세로로 쌓기 */
+  .spec-row{grid-template-columns:1fr}
+  .spec-row dt{padding:11px 16px 5px;border-right:0;background:transparent;font-size:11px}
+  .spec-row dd{padding:0 16px 13px;font-size:15px}
+  .pill{margin-bottom:4px}
+
+  /* 카드 */
+  .cards{gap:11px;margin-top:16px}
+  .card{padding:20px 18px}
+  .card h3{font-size:16.5px;margin:8px 0 6px}
+  .card p{font-size:14.5px}
+
+  /* 스크린샷 */
+  .art-grid{gap:12px}
+  .art .cap{flex-direction:column;gap:2px;padding:11px 15px;font-size:13px}
+
+  /* 로드맵: 라벨을 위로 */
+  .step{grid-template-columns:1fr}
+  .step .left{border-right:0;border-bottom:1px solid var(--edge);padding:11px 18px;
+    display:flex;align-items:center;gap:10px}
+  .step .left em{font-size:10.5px}
+  .step .state{margin-top:0;font-size:12px}
+  .step .right{padding:15px 18px}
+  .step h4{font-size:16px}
+  .step p{font-size:14.5px}
+
+  /* 스튜디오 */
+  .quote{font-size:19px;padding-left:15px;border-left-width:2px}
+  .val{padding:17px 18px}
+  .val h4{font-size:15.5px}
+
+  /* FAQ: 들여쓰기 축소 */
+  .faq summary{padding:15px 16px;font-size:15px;gap:10px}
+  .faq p{padding:0 16px 17px;font-size:14.5px}
+
+  /* 사전예약: 입력창과 버튼 세로 배치 */
+  .reg{padding:26px 20px}
+  .reg h2{font-size:21px}
+  .reg > p{font-size:14.5px}
+  .row{flex-direction:column;gap:8px;margin-top:20px}
+  .row .btn{width:100%;padding:13px}
+  .cbox{padding:18px}
+
+  /* 푸터 */
+  footer{padding:32px 0}
+  .f-grid{flex-direction:column;gap:22px}
+  .copy{margin-top:24px;font-size:12.5px}
+
+  .toast{width:calc(100% - 36px);text-align:center;bottom:16px;font-size:14px}
+}
+
+/* 아주 좁은 화면 */
+@media(max-width:360px){
+  h1{font-size:29px}
+  .logo{font-size:13px}
+  .bar .btn{padding:8px 12px;font-size:12.5px}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
