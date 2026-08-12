@@ -1,0 +1,439 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>인크립트 게임즈 — 고양이 레이싱 (CAT RUN)</title>
+<meta name="description" content="좌우로 피하는 조작 하나. 어디까지 갈 수 있는지가 전부인 모바일 러닝 게임 '고양이 레이싱'. 인크립트 게임즈에서 2026년 출시 예정입니다.">
+<meta name="theme-color" content="#161B24">
+<link rel="canonical" href="https://incrypt-games.vercel.app/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="인크립트 게임즈">
+<meta property="og:title" content="고양이 레이싱 (CAT RUN) — 인크립트 게임즈">
+<meta property="og:description" content="좌우로 피하는 조작 하나. 어디까지 갈 수 있는지가 전부인 모바일 러닝 게임.">
+<meta property="og:url" content="https://incrypt-games.vercel.app/">
+<meta property="og:image" content="https://incrypt-games.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#161B24;
+  --bg-2:#1C222E;
+  --card:#212836;
+  --card-2:#252D3C;
+  --edge:#333C4E;        /* 외곽선 */
+  --edge-lit:#48546B;
+  --ink:#EDF1F6;
+  --ink-2:#B9C4D2;       /* 본문 */
+  --dim:#8593A5;
+  --yellow:#FFD93B;
+  --orange:#F5A623;
+  --pink:#FF6FA5;
+  --green:#5BC98B;
+  --sans:'Gothic A1',system-ui,-apple-system,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--ink-2);
+  font-family:var(--sans);font-weight:400;font-size:16px;line-height:1.85;
+  letter-spacing:-.005em;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input{font-family:inherit}
+:focus-visible{outline:2px solid var(--yellow);outline-offset:3px}
+.wrap{width:min(1080px,92vw);margin:0 auto}
+
+h1,h2,h3,h4{color:var(--ink);font-weight:700;line-height:1.35;letter-spacing:-.02em}
+strong{font-weight:500;color:var(--ink)}
+
+/* ── 헤더 ────────────────────────── */
+header{position:sticky;top:0;z-index:80;background:rgba(22,27,36,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--edge)}
+.bar{display:flex;align-items:center;height:64px;gap:32px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;color:var(--ink);letter-spacing:0}
+.mark{width:24px;height:24px;border-radius:6px;border:1px solid var(--yellow);background:rgba(255,217,59,.14);display:grid;place-items:center;flex:none}
+.mark::before{content:'';width:0;height:0;border-left:7px solid var(--yellow);border-top:4.5px solid transparent;border-bottom:4.5px solid transparent;margin-left:2px}
+nav{margin-left:auto;display:flex;gap:24px;font-size:14.5px;color:var(--dim)}
+nav a{padding:4px 0;border-bottom:1px solid transparent}
+nav a:hover{color:var(--yellow);border-bottom-color:var(--yellow)}
+
+.btn{display:inline-block;font-weight:700;font-size:14.5px;padding:10px 20px;border-radius:8px;border:1px solid transparent;transition:.16s}
+.btn-y{background:var(--yellow);color:#161B24;border-color:#E6C132}
+.btn-y:hover{background:#FFE175;transform:translateY(-1px)}
+.btn-line{border-color:var(--edge-lit);color:var(--ink)}
+.btn-line:hover{border-color:var(--yellow);color:var(--yellow)}
+
+/* ── 히어로 ──────────────────────── */
+.hero{position:relative;padding:76px 0 88px;border-bottom:1px solid var(--edge);overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(70% 55% at 76% 42%,rgba(255,217,59,.10),transparent 70%),
+  linear-gradient(180deg,#1A202B,#161B24 70%)}
+.hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:150px;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 40px,transparent 40px 84px);
+  -webkit-mask-image:linear-gradient(transparent,#000);mask-image:linear-gradient(transparent,#000);
+  transform:perspective(180px) rotateX(56deg);transform-origin:bottom;opacity:.5}
+.hero .wrap{position:relative;z-index:3;display:grid;grid-template-columns:1fr 330px;gap:60px;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;
+  border:1px solid rgba(255,217,59,.42);background:rgba(255,217,59,.09);color:var(--yellow);padding:5px 12px;border-radius:99px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--yellow)}
+h1{font-size:clamp(36px,5.6vw,58px);margin:22px 0 8px;line-height:1.16}
+h1 span{color:var(--yellow)}
+.en-title{font-family:var(--mono);font-size:13px;letter-spacing:.36em;color:var(--dim)}
+.lede{margin-top:22px;max-width:46ch;font-size:16.5px;color:var(--ink-2)}
+.hero-cta{display:flex;gap:11px;margin-top:32px;flex-wrap:wrap}
+
+/* 폰 프레임 */
+.phone{border:1px solid var(--edge-lit);border-radius:26px;padding:8px;background:var(--card);box-shadow:0 24px 50px rgba(0,0,0,.5)}
+.phone img{border-radius:19px;border:1px solid rgba(0,0,0,.5)}
+.phone-cap{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--dim);text-align:center;margin-top:12px}
+
+/* ── 섹션 ────────────────────────── */
+section{padding:88px 0;border-bottom:1px solid var(--edge)}
+.sec-head{margin-bottom:40px}
+.eyebrow{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--yellow);
+  border-left:2px solid var(--yellow);padding-left:9px;margin-bottom:14px}
+h2{font-size:clamp(24px,3.2vw,34px)}
+.sec-head p{margin-top:12px;max-width:56ch;color:var(--dim);font-size:15.5px}
+
+/* 스펙 표 */
+.spec-table{border:1px solid var(--edge);border-radius:12px;overflow:hidden;background:var(--card)}
+.spec-row{display:grid;grid-template-columns:150px 1fr;border-bottom:1px solid var(--edge)}
+.spec-row:last-child{border-bottom:0}
+.spec-row dt{padding:15px 22px;font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--dim);
+  background:var(--card-2);border-right:1px solid var(--edge);display:flex;align-items:center}
+.spec-row dd{padding:15px 22px;font-size:15.5px;color:var(--ink)}
+.pill{display:inline-block;font-size:12.5px;border:1px solid var(--edge-lit);border-radius:5px;padding:2px 9px;margin-right:6px;color:var(--ink-2)}
+.pill.on{border-color:var(--green);color:var(--green)}
+
+/* 특징 카드 */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:16px;margin-top:22px}
+.card{border:1px solid var(--edge);border-radius:12px;background:var(--card);padding:26px 24px;transition:.18s}
+.card:hover{border-color:var(--edge-lit);background:var(--card-2)}
+.card .no{font-family:var(--mono);font-size:11px;color:var(--yellow);letter-spacing:.14em}
+.card h3{font-size:18px;margin:10px 0 8px}
+.card p{font-size:15px;color:var(--dim)}
+
+/* 아트 */
+.art-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.art{border:1px solid var(--edge);border-radius:12px;overflow:hidden;background:var(--card)}
+.art img{width:100%}
+.art .cap{border-top:1px solid var(--edge);padding:13px 18px;font-size:14px;color:var(--dim);display:flex;justify-content:space-between;gap:10px}
+.art .cap b{color:var(--ink);font-weight:500}
+.slot{border:1px dashed var(--edge-lit);border-radius:12px;min-height:200px;display:grid;place-items:center;
+  text-align:center;color:var(--dim);font-size:14px;padding:24px;background:rgba(255,255,255,.015)}
+.slot code{font-family:var(--mono);font-size:12px;color:var(--yellow)}
+
+/* 로드맵 */
+.steps{border:1px solid var(--edge);border-radius:12px;overflow:hidden}
+.step{display:grid;grid-template-columns:132px 1fr;border-bottom:1px solid var(--edge);background:var(--card)}
+.step:last-child{border-bottom:0}
+.step.now{background:var(--card-2)}
+.step .left{border-right:1px solid var(--edge);padding:20px 22px;background:rgba(0,0,0,.16)}
+.step .left em{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;font-style:normal;color:var(--dim)}
+.step .state{font-size:12.5px;font-weight:700;margin-top:5px}
+.step.done .state{color:var(--green)}
+.step.now .state{color:var(--yellow)}
+.step.todo .state{color:var(--dim)}
+.step .right{padding:20px 24px}
+.step h4{font-size:17px;margin-bottom:5px}
+.step p{font-size:15px;color:var(--dim)}
+
+/* 스튜디오 */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.quote{font-size:clamp(20px,2.6vw,26px);font-weight:700;color:var(--ink);line-height:1.55;
+  border-left:3px solid var(--yellow);padding-left:20px}
+.vals{display:grid;gap:14px}
+.val{border:1px solid var(--edge);border-radius:11px;background:var(--card);padding:20px 22px}
+.val h4{font-size:16px;margin-bottom:5px}
+.val p{font-size:14.5px;color:var(--dim)}
+
+/* FAQ */
+.faq{border:1px solid var(--edge);border-radius:12px;overflow:hidden;background:var(--card)}
+.faq details{border-bottom:1px solid var(--edge)}
+.faq details:last-child{border-bottom:0}
+.faq summary{padding:17px 22px;cursor:pointer;font-size:15.5px;color:var(--ink);list-style:none;display:flex;align-items:center;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:'Q';font-family:var(--mono);font-size:12px;color:var(--yellow);border:1px solid var(--edge-lit);
+  border-radius:4px;width:22px;height:22px;display:grid;place-items:center;flex:none}
+.faq summary::after{content:'+';margin-left:auto;color:var(--dim);font-family:var(--mono)}
+.faq details[open] summary::after{content:'−';color:var(--yellow)}
+.faq p{padding:0 22px 20px 56px;font-size:15px;color:var(--dim)}
+
+/* 사전예약 */
+.reg{border:1px solid var(--edge);border-radius:14px;background:var(--card);padding:38px;max-width:620px;margin:0 auto;text-align:center}
+.reg h2{font-size:clamp(22px,3vw,28px)}
+.reg > p{color:var(--dim);font-size:15px;margin-top:10px}
+.row{display:flex;gap:9px;margin-top:24px}
+.fld{flex:1;background:var(--bg);border:1px solid var(--edge-lit);border-radius:9px;padding:13px 15px;color:var(--ink);font-size:15px}
+.fld::placeholder{color:#6C7889}
+.fld:focus{border-color:var(--yellow);outline:none}
+.msg{font-size:14px;margin-top:13px;min-height:21px}
+.msg.err{color:#FF8B7B}.msg.ok{color:var(--green)}
+.count{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.08em;margin-top:14px;
+  border-top:1px solid var(--edge);padding-top:16px}
+.count b{color:var(--yellow);font-size:15px;font-weight:500}
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;max-width:620px;margin-left:auto;margin-right:auto}
+.cbox{border:1px solid var(--edge);border-radius:11px;background:var(--card);padding:22px}
+.cbox h4{font-size:15px;margin-bottom:6px}
+.cbox p{font-size:14.5px;color:var(--dim)}
+.cbox a{color:var(--yellow);border-bottom:1px solid rgba(255,217,59,.35)}
+
+/* 푸터 */
+footer{padding:40px 0;font-size:14px;color:var(--dim);background:var(--bg-2)}
+.f-grid{display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap}
+footer li{list-style:none;line-height:2.05}
+footer h5{font-size:13.5px;color:var(--ink);margin-bottom:9px;font-weight:700}
+.copy{border-top:1px solid var(--edge);margin-top:30px;padding-top:20px;font-size:13px;color:#6F7C8D}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,90px);background:var(--yellow);color:#161B24;
+  font-weight:700;font-size:14.5px;padding:12px 24px;border-radius:9px;z-index:200;opacity:0;transition:.28s}
+.toast.on{transform:translate(-50%,0);opacity:1}
+
+@media(max-width:900px){
+  nav{display:none}
+  .hero .wrap{grid-template-columns:1fr;gap:40px}
+  .phone{max-width:300px;margin:0 auto}
+  .two,.art-grid,.contact{grid-template-columns:1fr}
+  .spec-row{grid-template-columns:112px 1fr}
+  .step{grid-template-columns:104px 1fr}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header>
+  <div class="wrap bar">
+    <div class="logo"><span class="mark"></span>인크립트 게임즈</div>
+    <nav>
+      <a href="#about">게임 소개</a>
+      <a href="#art">스크린샷</a>
+      <a href="#roadmap">개발 현황</a>
+      <a href="#studio">스튜디오</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn-y" href="#reg">사전예약</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <span class="badge"><span class="dot"></span>개발 중 · 2026 출시 예정</span>
+      <h1>고양이 <span>레이싱</span></h1>
+      <p class="en-title">C A T &nbsp; R U N</p>
+      <p class="lede">좌우로 피하는 조작 하나. 밤길을 달리는 고양이 앞으로 장애물이 쏟아지고, 반응할 시간은 점점 짧아집니다. 어디까지 갈 수 있는지가 전부인 모바일 러닝 게임입니다.</p>
+      <div class="hero-cta">
+        <a class="btn btn-y" href="#reg">사전예약 알림 받기</a>
+        <a class="btn btn-line" href="#about">게임 살펴보기</a>
+      </div>
+    </div>
+    <div>
+      <div class="phone"><img fetchpriority="high" src="images/title.webp" alt="고양이 레이싱 타이틀 화면"></div>
+      <p class="phone-cap">IN-GAME SCREEN · 개발 빌드</p>
+    </div>
+  </div>
+</div>
+
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">GAME</span>
+      <h2>게임 소개</h2>
+      <p>규칙을 설명하는 데 3초, 익숙해지는 데는 한참 걸리는 게임을 목표로 만들고 있습니다.</p>
+    </div>
+
+    <dl class="spec-table">
+      <div class="spec-row"><dt>타이틀</dt><dd>고양이 레이싱 <span style="color:var(--dim)">(CAT RUN)</span></dd></div>
+      <div class="spec-row"><dt>장르</dt><dd>엔드리스 러너 · 아케이드</dd></div>
+      <div class="spec-row"><dt>플랫폼</dt><dd><span class="pill">Android</span><span class="pill">iOS</span></dd></div>
+      <div class="spec-row"><dt>가격</dt><dd>무료 (인앱 결제 · 뽑기 천장 적용)</dd></div>
+      <div class="spec-row"><dt>플레이</dt><dd>목숨 3개 · 레벨제 진행 (초원 외 스테이지 개발 중)</dd></div>
+      <div class="spec-row"><dt>지원 언어</dt><dd>한국어 · English</dd></div>
+      <div class="spec-row"><dt>현재 상태</dt><dd><span class="pill on">● 개발 중 — 콘텐츠 확장 단계</span></dd></div>
+    </dl>
+
+    <div class="cards">
+      <div class="card"><span class="no">01</span><h3>한 손, 두 방향</h3><p>화면 좌우를 누르거나 쓸어 넘기면 끝입니다. 지하철에서 한 손으로 하는 상황까지 계산해 조작을 설계했습니다.</p></div>
+      <div class="card"><span class="no">02</span><h3>달릴수록 빨라진다</h3><p>초원에서 시작해 레벨이 오를수록 배경이 바뀌고 속도가 붙습니다. 목숨은 세 개, 장애물 하나가 하트 하나입니다.</p></div>
+      <div class="card"><span class="no">03</span><h3>등급이 있는 아이템</h3><p>전설 등급은 보호막을 줍니다. 다만 뽑기에 천장이 있어서, 코인만 모으면 결제 없이도 결국 손에 들어옵니다.</p></div>
+      <div class="card"><span class="no">04</span><h3>미션과 랭킹</h3><p>매일 바뀌는 미션으로 코인을 모으고, 주간 랭킹으로 최고 기록을 다시 깰 이유를 만듭니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="art">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">SCREENSHOTS</span>
+      <h2>게임 화면</h2>
+      <p>개발 빌드 기준이며, 정식 출시 버전과 다를 수 있습니다.</p>
+    </div>
+    <div class="art-grid">
+      <div class="art">
+        <img loading="lazy" decoding="async" src="images/play.webp" alt="고양이 레이싱 인게임 플레이 화면 — 초원 스테이지">
+        <div class="cap"><b>인게임 플레이</b><span>LEVEL 1 · 초원</span></div>
+      </div>
+      <div class="art">
+        <img loading="lazy" decoding="async" src="images/character.webp" alt="고양이 레이싱 메인 캐릭터">
+        <div class="cap"><b>메인 캐릭터</b><span>기본 고양이 · 하트 바이크</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">DEVELOPMENT</span>
+      <h2>개발 현황</h2>
+      <p>단계가 끝날 때마다 이 페이지에서 소식을 전합니다.</p>
+    </div>
+    <div class="steps">
+      <div class="step done"><div class="left"><em>STEP 01</em><div class="state">완료</div></div>
+        <div class="right"><h4>코어 플레이</h4><p>조작감, 장애물 배치, 속도 곡선을 확정했습니다.</p></div></div>
+      <div class="step done"><div class="left"><em>STEP 02</em><div class="state">완료</div></div>
+        <div class="right"><h4>아트 &amp; 사운드</h4><p>밤길 배경과 고양이 캐릭터 세트를 완성했습니다.</p></div></div>
+      <div class="step now"><div class="left"><em>STEP 03</em><div class="state">진행 중</div></div>
+        <div class="right"><h4>콘텐츠 확장</h4><p>상점, 뽑기, 미션, 랭킹을 붙이고 밸런스를 잡고 있습니다.</p></div></div>
+      <div class="step todo"><div class="left"><em>STEP 04</em><div class="state">예정</div></div>
+        <div class="right"><h4>비공개 테스트</h4><p>사전예약해 주신 분들께 먼저 빌드를 보내드립니다.</p></div></div>
+      <div class="step todo"><div class="left"><em>STEP 05</em><div class="state">예정</div></div>
+        <div class="right"><h4>정식 출시</h4><p>Google Play와 App Store에 동시 출시합니다.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="studio">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">STUDIO</span>
+      <h2>인크립트 게임즈</h2>
+    </div>
+    <div class="two">
+      <div>
+        <p class="quote">복잡한 튜토리얼 없이,<br>첫 30초에 재미가 오는 게임을 만듭니다.</p>
+        <p style="margin-top:22px;font-size:15.5px;color:var(--dim)">모바일 게임은 대개 짧은 틈에 켜집니다. 그 짧은 시간에 설명서를 읽고 싶은 사람은 없습니다. 저희는 규칙을 줄이는 대신 손맛에 시간을 씁니다. 고양이 레이싱은 그 생각으로 만든 첫 번째 게임입니다.</p>
+      </div>
+      <div class="vals">
+        <div class="val"><h4>작게 만들고 빨리 고친다</h4><p>기획서보다 플레이 가능한 빌드를 먼저 만듭니다. 재미없으면 그 자리에서 버립니다.</p></div>
+        <div class="val"><h4>과금은 지름길일 뿐, 벽이 아니다</h4><p>전설 등급이 보호막을 주는 건 맞습니다. 대신 천장과 미션으로 무과금도 같은 곳에 도착하게 설계했습니다.</p></div>
+        <div class="val"><h4>출시 이후에도 고친다</h4><p>출시는 시작입니다. 플레이 기록을 보고 계속 다듬습니다.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">FAQ</span>
+      <h2>자주 묻는 질문</h2>
+    </div>
+    <div class="faq">
+      <details open><summary>언제 출시하나요?</summary><p>2026년 출시를 목표로 개발 중입니다. 정확한 날짜가 정해지면 사전예약해 주신 분들께 가장 먼저 알려드립니다.</p></details>
+      <details><summary>인터넷 연결이 필요한가요?</summary><p>플레이 자체는 오프라인에서도 가능합니다. 랭킹과 미션 갱신에는 연결이 필요합니다.</p></details>
+      <details><summary>결제하면 더 유리해지나요?</summary><p>솔직히 말씀드리면 유리해지는 부분이 있습니다. 전설 등급 아이템은 보호막을 주기 때문에 한 번 더 버틸 수 있습니다. 다만 뽑기에는 천장이 있어 일정 횟수를 채우면 반드시 나오고, 미션과 플레이 보상으로 코인이 꾸준히 들어옵니다. 결제는 그 시간을 줄여주는 지름길이지, 무과금이 넘을 수 없는 벽이 되지 않도록 밸런스를 잡고 있습니다.</p></details>
+      <details><summary>천장은 몇 번인가요?</summary><p>비공개 테스트를 거치며 확정할 예정입니다. 확정되는 즉시 이 페이지와 게임 내 상점에 정확한 횟수를 공개합니다.</p></details>
+      <details><summary>비공개 테스트는 어떻게 참여하나요?</summary><p>사전예약자 중에서 선정해 개별 안내를 보내드립니다. 아래에서 이메일을 남겨주세요.</p></details>
+      <details><summary>퍼블리싱 제휴를 논의하고 싶습니다.</summary><p>아래 제휴 문의 메일로 연락 주시면 담당자가 회신드립니다.</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="reg">
+  <div class="wrap">
+    <div class="reg">
+      <span class="eyebrow">PRE-REGISTER</span>
+      <h2>출시하면 가장 먼저 알려드릴게요</h2>
+      <p>비공개 테스트 참여 기회와 출시 소식을 보내드립니다. 그 외 용도로는 사용하지 않습니다.</p>
+      <div class="row">
+        <input class="fld" id="mail" type="email" placeholder="이메일 주소" autocomplete="email">
+        <button class="btn btn-y" id="go" style="flex:none">신청</button>
+      </div>
+      <p class="msg" id="msg"></p>
+    </div>
+    <div class="contact">
+      <div class="cbox"><h4>제휴 · 퍼블리싱 문의</h4><p>글로벌 퍼블리싱과 IP 협업 제안을 기다립니다.<br><a href="mailto:byungcookst@gmail.com">byungcookst@gmail.com</a></p></div>
+      <div class="cbox"><h4>채용</h4><p>클라이언트 개발자와 2D 아티스트를 찾고 있습니다.<br><a href="mailto:byungcookst@gmail.com">byungcookst@gmail.com</a></p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <div class="logo" style="margin-bottom:10px"><span class="mark"></span>인크립트 게임즈</div>
+        <p style="max-width:34ch">첫 30초에 재미가 오는 모바일 게임을 만듭니다.</p>
+      </div>
+      <div><h5>게임</h5><ul><li><a href="#about">고양이 레이싱</a></li><li><a href="#art">스크린샷</a></li><li><a href="#roadmap">개발 현황</a></li></ul></div>
+      <div><h5>회사</h5><ul><li><a href="#studio">스튜디오 소개</a></li><li><a href="#reg">채용</a></li><li><a href="#reg">제휴 문의</a></li></ul></div>
+      <div><h5>고객지원</h5><ul><li><a href="#faq">자주 묻는 질문</a></li><li>이용약관</li><li>개인정보처리방침</li></ul></div>
+    </div>
+    <p class="copy">© 2026 INCRYPT GAMES. 이미지는 개발 중 빌드 기준입니다.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ─────────────────────────────────────────────
+   사전예약 폼
+
+   FORM_ENDPOINT 를 본인 Formspree 주소로 바꾸세요.
+     1. https://formspree.io 가입 (무료 요금제: 월 50건)
+     2. New Form 생성 → 받은 엔드포인트 주소 복사
+     3. 아래 FORM_ENDPOINT 값에 붙여넣기
+
+   설정 전에는 메일 앱이 열리는 방식으로 동작합니다.
+   ───────────────────────────────────────────── */
+const FORM_ENDPOINT = '';          // 예: 'https://formspree.io/f/abcdwxyz'
+const FALLBACK_MAIL = 'byungcookst@gmail.com';
+
+const toastEl = document.getElementById('toast'); let tt;
+function toast(m){ toastEl.textContent=m; toastEl.classList.add('on'); clearTimeout(tt); tt=setTimeout(()=>toastEl.classList.remove('on'),2600); }
+
+const btn = document.getElementById('go');
+const el  = document.getElementById('mail');
+const msg = document.getElementById('msg');
+
+btn.onclick = async () => {
+  const v = el.value.trim();
+  msg.className = 'msg err';
+  if(!/^\S+@\S+\.\S+$/.test(v)){ msg.textContent='이메일 주소를 정확히 입력해 주세요.'; el.focus(); return; }
+
+  if(!FORM_ENDPOINT){
+    location.href = 'mailto:' + FALLBACK_MAIL
+      + '?subject=' + encodeURIComponent('고양이 레이싱 사전예약 신청')
+      + '&body='    + encodeURIComponent('사전예약 신청합니다.\n이메일: ' + v);
+    msg.className='msg ok';
+    msg.textContent='메일 앱에서 보내기를 눌러 신청을 완료해 주세요.';
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = '전송 중';
+  try{
+    const r = await fetch(FORM_ENDPOINT, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+      body: JSON.stringify({ email: v, _subject: '고양이 레이싱 사전예약' })
+    });
+    if(!r.ok) throw new Error(r.status);
+    msg.className='msg ok';
+    msg.textContent='신청이 완료됐습니다. 출시 소식을 보내드릴게요.';
+    el.value=''; toast('사전예약 완료');
+  }catch(e){
+    msg.textContent='지금은 신청을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요.';
+  }finally{
+    btn.disabled = false; btn.textContent = '신청';
+  }
+};
+el.addEventListener('keydown', e => { if(e.key==='Enter') btn.click(); });
+</script>
+
